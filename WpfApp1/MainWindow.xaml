@@ -25,40 +25,75 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <TextBox Grid.Row="1" Style="{StaticResource NumbersTextBox}" HorizontalAlignment="Right" Text="0" 
+        <TextBlock Grid.Row="1" Style="{StaticResource NumbersTextBlock}" HorizontalAlignment="Right"  
                  Width="auto" Height="auto" MinWidth="35" MinHeight="100"
                  FontSize="40"
                  Grid.Column="0" Grid.ColumnSpan="4"
                  TextAlignment="Right"
-                 MaxLength="16"
-                 Margin="15,0,15,0"/>
+                 Margin="15,0,15,0"
+                 TextWrapping="Wrap"
+                 Text="{Binding Path=Display, Mode=OneWay}"/>
 
         <Button Content="+/-" Style="{StaticResource AllButtons}" Grid.Column="0" Grid.Row="7" />
-        <Button Content="1" Style="{StaticResource AllButtons}" Grid.Column="0" Grid.Row="6" />
-        <Button Content="4" Style="{StaticResource AllButtons}" Grid.Column="0" Grid.Row="5" />
-        <Button Content="7" Style="{StaticResource AllButtons}" Grid.Column="0" Grid.Row="4" />
+        
+        <Button Content="1" Style="{StaticResource AllButtons}" Grid.Column="0" Grid.Row="6" 
+                Command="{Binding Path=NumberCommand}" CommandParameter="1"/>
+        
+        <Button Content="4" Style="{StaticResource AllButtons}" Grid.Column="0" Grid.Row="5" 
+                Command="{Binding Path=NumberCommand}" CommandParameter="4"/>
+        
+        <Button Content="7" Style="{StaticResource AllButtons}" Grid.Column="0" Grid.Row="4" 
+                Command="{Binding Path=NumberCommand}" CommandParameter="7"/>
+        
         <Button Content="¹⁄ᵪ" Style="{StaticResource AllButtons}" Grid.Column="0" Grid.Row="3" />
+        
         <Button Content="%" Style="{StaticResource AllButtons}" Grid.Column="0" Grid.Row="2" />
 
-        <Button Content="0" Style="{StaticResource AllButtons}" Grid.Column="1" Grid.Row="7" />
-        <Button Content="2" Style="{StaticResource AllButtons}" Grid.Column="1" Grid.Row="6" />
-        <Button Content="5" Style="{StaticResource AllButtons}" Grid.Column="1" Grid.Row="5" />
-        <Button Content="8" Style="{StaticResource AllButtons}" Grid.Column="1" Grid.Row="4" />
+        <Button Content="0" Style="{StaticResource AllButtons}" Grid.Column="1" Grid.Row="7" 
+                Command="{Binding Path=NumberCommand}" CommandParameter="0"/>
+        
+        <Button Content="2" Style="{StaticResource AllButtons}" Grid.Column="1" Grid.Row="6" 
+                Command="{Binding Path=NumberCommand}" CommandParameter="2"/>
+
+        <Button Content="5" Style="{StaticResource AllButtons}" Grid.Column="1" Grid.Row="5" 
+                Command="{Binding Path=NumberCommand}" CommandParameter="5"/>
+        
+        <Button Content="8" Style="{StaticResource AllButtons}" Grid.Column="1" Grid.Row="4" 
+                Command="{Binding Path=NumberCommand}" CommandParameter="8"/>
+        
         <Button Content="ᵡ²" Style="{StaticResource AllButtons}" Grid.Column="1" Grid.Row="3" />
+        
         <Button Content="CE" Style="{StaticResource AllButtons}" Grid.Column="1" Grid.Row="2" />
 
         <Button Content="," Style="{StaticResource AllButtons}" Grid.Column="2" Grid.Row="7" />
-        <Button Content="3" Style="{StaticResource AllButtons}" Grid.Column="2" Grid.Row="6" />
-        <Button Content="6" Style="{StaticResource AllButtons}" Grid.Column="2" Grid.Row="5" />
-        <Button Content="9" Style="{StaticResource AllButtons}" Grid.Column="2" Grid.Row="4" />
+        
+        <Button Content="3" Style="{StaticResource AllButtons}" Grid.Column="2" Grid.Row="6" 
+                Command="{Binding Path=NumberCommand}" CommandParameter="3"/>
+        
+        <Button Content="6" Style="{StaticResource AllButtons}" Grid.Column="2" Grid.Row="5" 
+                Command="{Binding Path=NumberCommand}" CommandParameter="6"/>
+        
+        <Button Content="9" Style="{StaticResource AllButtons}" Grid.Column="2" Grid.Row="4" 
+                Command="{Binding Path=NumberCommand}" CommandParameter="9"/>
+        
         <Button Content="√ᵡ" Style="{StaticResource AllButtons}" Grid.Column="2" Grid.Row="3" />
-        <Button Content="C" Style="{StaticResource AllButtons}" Grid.Column="2" Grid.Row="2" />
+        <Button Content="C" Style="{StaticResource AllButtons}" Grid.Column="2" Grid.Row="2" 
+                Command="{Binding Path=ClearCommand}"/>
 
-        <Button Content="=" Style="{StaticResource EqButton}" Grid.Column="3" Grid.Row="7" />
-        <Button Content="+" Style="{StaticResource AllButtons}" Grid.Column="3" Grid.Row="6" />
-        <Button Content="-" Style="{StaticResource AllButtons}" Grid.Column="3" Grid.Row="5" />
-        <Button Content="×" Style="{StaticResource AllButtons}" Grid.Column="3" Grid.Row="4" />
-        <Button Content="÷" Style="{StaticResource AllButtons}" Grid.Column="3" Grid.Row="3" />
+        <Button Content="=" Style="{StaticResource EqButton}" Grid.Column="3" Grid.Row="7" 
+                Command="{Binding Path=EqualsCommand}"/>
+        
+        <Button Content="+" Style="{StaticResource AllButtons}" Grid.Column="3" Grid.Row="6" 
+                Command="{Binding Path=PlusCommand}"/>
+        
+        <Button Content="-" Style="{StaticResource AllButtons}" Grid.Column="3" Grid.Row="5" 
+                Command="{Binding Path=MinusCommand}"/>
+        
+        <Button Content="×" Style="{StaticResource AllButtons}" Grid.Column="3" Grid.Row="4" 
+                Command="{Binding Path=TimesCommand}"/>
+        
+        <Button Content="÷" Style="{StaticResource AllButtons}" Grid.Column="3" Grid.Row="3" 
+                Command="{Binding Path=OverCommand}"/>
         <Button Content="⌫" Style="{StaticResource AllButtons}" FontSize="18" Grid.Column="3" Grid.Row="2" />
 
         <Menu HorizontalAlignment="Left" VerticalAlignment="Top">

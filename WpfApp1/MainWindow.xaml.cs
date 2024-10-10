@@ -8,6 +8,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfApp1.Models;
+using WpfApp1.MVVM;
 
 namespace WpfApp1
 {
@@ -19,6 +21,8 @@ namespace WpfApp1
         public MainWindow()
         {
             InitializeComponent();
+            CalculatorModel model = new CalculatorModel();
+            this.DataContext = new CalculatorViewModel(model);
         }
     }
 }
