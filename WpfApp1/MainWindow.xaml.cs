@@ -1,15 +1,11 @@
-﻿using System.Text;
+﻿using ConsoleCalculator.Core.Operations;
+using ConsoleCalculator.Core.Services;
+using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using WpfApp1.Models;
+using WpfApp1.Interfaces;
+using WpfApp1.Models.Operations;
 using WpfApp1.MVVM;
+using WpfApp1.Services;
 
 namespace WpfApp1
 {
@@ -20,9 +16,27 @@ namespace WpfApp1
     {
         public MainWindow()
         {
-            InitializeComponent();
-            CalculatorModel model = new CalculatorModel();
-            this.DataContext = new CalculatorViewModel(model);
+            var services = new ServiceCollection();
+
+            // Регистрация операций
+            services.AddTransient<IOperation, AddOperation>();
+            services.AddTransient<IOperation, SubtractOperation>();
+            services.AddTransient<IOperation, MultiplyOperation>();
+            services.AddTransient<IOperation, DivideOperation>();
+            services.AddTransient<IOperation, PowerOperation>();
+            services.AddTransient<IOperation, ModulusOperation>();
+
+            // Регистрация других сервисов
+            services.AddTransient<ITokenizer, Tokenizer>();
+            services.AddTransient<IParser, Parser>();
+            services.AddTransient<IEvaluator, Evaluator>();
+            services.AddTransient<Calculator>();
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var calculator = serviceProvider.GetService<Calculator>();
+
+            DataContext = new CalculatorViewModel(calculator);
         }
     }
 }

@@ -1,58 +1,112 @@
-﻿using System.Windows.Input;
-using WpfApp1.Models;
+﻿using System.Windows;
+using System.Windows.Input;
+using WpfApp1.Services;
 using WpfApp1.Utilities;
 
 namespace WpfApp1.MVVM
 {
-    class CalculatorViewModel : ViewModelBase
+    class CalculatorViewModel : Notifier
     {
-        private CalculatorModel _calc;
+        private readonly Calculator _calculatorService;
 
-        public RelayCommand NumberCommand { get; private set; }
-        public RelayCommand PlusCommand { get; private set; }
-        public RelayCommand MinusCommand { get; private set; }
-        public RelayCommand TimesCommand { get; private set; }
-        public RelayCommand OverCommand { get; private set; }
-        public RelayCommand EqualsCommand { get; private set; }
-        public RelayCommand ClearCommand { get; private set; }
-        public String Display
+        public CalculatorViewModel(Calculator calculatorService)
         {
-            get
+            _calculatorService = calculatorService;
+            _expression = "0";
+            _result = 0;
+        }
+
+        private string _expression;
+        public string Expression
+        {
+            get { return _expression; }
+            set
             {
-                return _calc.Display;
+                _expression = value;
+                OnPropertyChanged();
             }
         }
 
-        public CalculatorViewModel(CalculatorModel calculator)
+        private double _result;
+        public double Result
         {
-            _calc = calculator;
-
-            NumberCommand = new RelayCommand(param => { _calc.Number(Convert.ToInt32(param)); UpdateDisplay(); },
-                                            param => _calc.CanDoNumber());
-
-            PlusCommand = new RelayCommand(param => { _calc.Plus(); UpdateDisplay(); },
-                                            param => _calc.CanDoOperator());
-
-            MinusCommand = new RelayCommand(param => { _calc.Minus(); UpdateDisplay(); },
-                                            param => _calc.CanDoOperator());
-
-            TimesCommand = new RelayCommand(param => { _calc.Times(); UpdateDisplay(); },
-                                            param => _calc.CanDoOperator());
-
-            OverCommand = new RelayCommand(param => { _calc.Over(); UpdateDisplay(); },
-                                            param => _calc.CanDoOperator());
-
-            EqualsCommand = new RelayCommand(param => { _calc.Equals(); UpdateDisplay(); },
-                                            param => _calc.CanDoEquals());
-
-            ClearCommand = new RelayCommand(param => { _calc.Clear(); UpdateDisplay(); },
-                                            param => _calc.CanDoClear());
+            get { return _result; }
+            set
+            {
+                _result = value;
+                OnPropertyChanged();
+            }
         }
 
-        private void UpdateDisplay()
+        private ICommand _enterSymbolCommand;
+        public ICommand EnterSymbolCommand
         {
-            OnPropertyChanged("Display");
-            CommandManager.InvalidateRequerySuggested();
+            get
+            {
+                if (_enterSymbolCommand == null)
+                {
+                    _enterSymbolCommand = new RelayCommand(
+                        param => AppendSymbol(param),
+                        param => true);
+                }
+                return _enterSymbolCommand;
+            }
+        }
+
+        private ICommand _calculateCommand;
+        public ICommand CalculateCommand
+        {
+            get
+            {
+                if (_calculateCommand == null)
+                {
+                    _calculateCommand = new RelayCommand(
+                        param => Calculate(_expression),
+                        param => true);
+                }
+                return _calculateCommand;
+            }
+        }
+
+        private ICommand _clearCommand;
+        public ICommand ClearCommand
+        {
+            get
+            {
+                if(_clearCommand == null)
+                {
+                    _clearCommand = new RelayCommand(
+                        param => Clear(_expression),
+                        param => true);
+                }
+                return _clearCommand;
+            }
+        }
+
+        private void AppendSymbol(object parameter)
+        {
+            if (Expression != "0")
+                Expression += parameter;
+            else Expression = parameter.ToString()!;
+        }
+
+
+        private void Calculate(object parameter)
+        {
+            try
+            {
+                Result = _calculatorService.Calculate(Expression);
+                Expression = Result.ToString();
+            }
+            catch (Exception ex)
+            {
+                Expression=(ex.Message);
+            }
+        }
+
+        private void Clear(object parameter)
+        {
+            Expression = "0";
         }
     }
 }

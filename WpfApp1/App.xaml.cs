@@ -1,8 +1,11 @@
-﻿using System.Configuration;
-using System.Data;
+﻿using ConsoleCalculator.Core.Operations;
+using ConsoleCalculator.Core.Services;
+using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
-using WpfApp1.Models;
+using WpfApp1.Interfaces;
+using WpfApp1.Models.Operations;
 using WpfApp1.MVVM;
+using WpfApp1.Services;
 
 namespace WpfApp1
 {
