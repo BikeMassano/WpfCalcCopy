@@ -1,5 +1,4 @@
-﻿using ConsoleCalculator.Core.Operations;
-using ConsoleCalculator.Core.Services;
+﻿using ConsoleCalculator.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 using WpfApp1.Interfaces;
@@ -25,6 +24,7 @@ namespace WpfApp1
             services.AddTransient<IOperation, DivideOperation>();
             services.AddTransient<IOperation, PowerOperation>();
             services.AddTransient<IOperation, ModulusOperation>();
+            services.AddTransient<IOperation, SqrtOperation>();
 
             // Регистрация других сервисов
             services.AddTransient<ITokenizer, Tokenizer>();

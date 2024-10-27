@@ -1,6 +1,6 @@
 ﻿using WpfApp1.Interfaces;
 
-namespace ConsoleCalculator.Core.Operations
+namespace WpfApp1.Models.Operations
 {
     public class ModulusOperation : IOperation
     {
@@ -15,7 +15,7 @@ namespace ConsoleCalculator.Core.Operations
         {
             if (right == 0)
             {
-                throw new ArgumentException("Division by zero");
+                throw new ArgumentException("Деление на 0 невозможно.");
             }
 
             return left % right;

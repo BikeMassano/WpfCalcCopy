@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Input;
 using WpfApp1.Services;
 using WpfApp1.Utilities;
@@ -73,13 +74,28 @@ namespace WpfApp1.MVVM
         {
             get
             {
-                if(_clearCommand == null)
+                if (_clearCommand == null)
                 {
                     _clearCommand = new RelayCommand(
                         param => Clear(_expression),
                         param => true);
                 }
                 return _clearCommand;
+            }
+        }
+
+        private ICommand _clearEntryCommand;
+        public ICommand ClearEntryCommand
+        {
+            get
+            {
+                if (_clearEntryCommand == null)
+                {
+                    _clearEntryCommand = new RelayCommand(
+                        param => ClearEntry(_expression),
+                        param => true);
+                }
+                return _clearEntryCommand;
             }
         }
 
@@ -108,5 +124,20 @@ namespace WpfApp1.MVVM
         {
             Expression = "0";
         }
+
+        private void ClearEntry(object parameter)
+        {
+            if (Expression != "0")
+            {
+            // Ищем последнее число в выражении
+            Match match = Regex.Match(Expression, @"(\d+(\.\d+)?)$");
+                if (match.Success)
+                {
+                    // Удаляем последнее число из строки
+                    Expression = Expression.Substring(0, match.Index);
+                }
+            }
+        }
+        
     }
 }

@@ -84,11 +84,11 @@ namespace ConsoleCalculator.Core.Services
             }
             if(tokens.Count < 1)
             {
-                throw new ArgumentException("No token found");
+                throw new ArgumentException("Токен не найден");
             }
             if (tokens.Count < 2)
             {
-                throw new ArgumentException("No operations found");
+                throw new ArgumentException("Операций не найдено");
             }
             if (tokens.Count > 0 && tokens.Last().Type == TokenType.Operator)
             {

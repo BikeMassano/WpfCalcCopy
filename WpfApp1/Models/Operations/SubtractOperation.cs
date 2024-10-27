@@ -1,6 +1,6 @@
 ﻿using WpfApp1.Interfaces;
 
-namespace ConsoleCalculator.Core.Operations
+namespace WpfApp1.Models.Operations
 {
     public class SubtractOperation : IOperation
     {

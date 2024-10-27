@@ -21,7 +21,7 @@ namespace ConsoleCalculator.Core.Services
             // Handle empty input
             if (tokenList.Count == 0)
             {
-                throw new ArgumentException("No token found");
+                throw new ArgumentException("Токены не найдены");
             }
 
             return ParseExpression(tokenList, 0, tokenList.Count - 1);
@@ -40,7 +40,7 @@ namespace ConsoleCalculator.Core.Services
                 {
                     if(tokens.Count < 2)
                     {
-                        throw new ArgumentException("No operations found");
+                        throw new ArgumentException("Операции не найдены");
                     }
                     nodes.Push(new Node(token));
                 }
