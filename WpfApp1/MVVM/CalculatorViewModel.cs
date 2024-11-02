@@ -130,7 +130,7 @@ namespace WpfApp1.MVVM
             if (Expression != "0")
             {
             // Ищем последнее число в выражении
-            Match match = Regex.Match(Expression, @"(\d+(\.\d+)?)$");
+            Match match = Regex.Match(Expression, @"(\d+(?:[.,]\d+)?)$");
                 if (match.Success)
                 {
                     // Удаляем последнее число из строки
