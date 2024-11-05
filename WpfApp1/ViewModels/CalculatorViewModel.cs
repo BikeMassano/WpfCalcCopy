@@ -10,9 +10,12 @@ namespace WpfApp1.ViewModels
     {
         #region Private members
         private readonly ICalculator _calculator;
+
         private string _firstOperand = string.Empty;
         private string _secondOperand = "0";
+
         private OperationModel? _currentOperation = new OperationModel();
+
         private const string kDefaultOperandValue = "0";
         private const int kMaxOperandLength = 16;
         #endregion
@@ -183,14 +186,22 @@ namespace WpfApp1.ViewModels
 
         public void OnUnaryOperationButtonClicked(object parameter)
         {
-            FirstOperand = String.Empty;
-            _currentOperation.FirstOperand = null;
-            _currentOperation.SecondOperand = double.Parse(SecondOperand);
-            _currentOperation.Operation = parameter.ToString();
-            var expression = $"{_currentOperation.Operation} {_currentOperation.SecondOperand}";
-            var result = _calculator.Calculate(expression);
-            SecondOperand = result.ToString();
-            AddLogToJournal(expression, result);
+            try
+            {
+                FirstOperand = String.Empty;
+                _currentOperation.FirstOperand = null;
+                _currentOperation.SecondOperand = double.Parse(SecondOperand);
+                _currentOperation.Operation = parameter.ToString();
+                var expression = $"{_currentOperation.Operation} {_currentOperation.SecondOperand}";
+                var result = _calculator.Calculate(expression);
+                SecondOperand = result.ToString();
+                AddLogToJournal(expression, result);
+            }
+            catch (Exception e)
+            {
+                Clear();
+                SecondOperand = e.Message;
+            }
         }
 
         public void Equals()

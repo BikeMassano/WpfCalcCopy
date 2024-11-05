@@ -13,7 +13,7 @@ namespace WpfApp1
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly int thresholdWidth = 500;
+        private readonly int thresholdWidth = 600;
         public MainWindow()
         {
 
