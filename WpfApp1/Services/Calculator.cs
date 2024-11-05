@@ -17,6 +17,7 @@ namespace WpfApp1.Services
             _binaryOperations.Add("%", new ModulusOperation());
             _unaryOperations.Add("sqrt", new SqrtOperation());
             _unaryOperations.Add("pow", new PowerOperation());
+            _unaryOperations.Add("1/x", new OneDivideXOperation());
         }
 
         public double Calculate(string expression)
@@ -26,7 +27,7 @@ namespace WpfApp1.Services
             if (parts.Length == 2)  // Унарная операция
             {
                 var operation = parts[0];
-                var number = float.Parse(parts[1]);
+                var number = double.Parse(parts[1]);
 
                 if (_unaryOperations.ContainsKey(operation))
                 {

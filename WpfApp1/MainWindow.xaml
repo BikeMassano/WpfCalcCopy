@@ -51,7 +51,8 @@
                        Text="{Binding SecondOperand}"/>
             </StackPanel>
 
-            <Button Content="+/-" Style="{StaticResource AllButtons}" Grid.Column="0" Grid.Row="7"/>
+            <Button Content="+/-" Style="{StaticResource AllButtons}" Grid.Column="0" Grid.Row="7"
+                    Command="{Binding InvertCommand}"/>
 
             <Button Content="1" Style="{StaticResource AllButtons}" Grid.Column="0" Grid.Row="6"
                 Command="{Binding EnterNumberCommand}" CommandParameter="1"/>
@@ -62,7 +63,8 @@
             <Button Content="7" Style="{StaticResource AllButtons}" Grid.Column="0" Grid.Row="4"
                 Command="{Binding EnterNumberCommand}" CommandParameter="7"/>
 
-            <Button Content="¹⁄ᵪ" Style="{StaticResource AllButtons}" Grid.Column="0" Grid.Row="3" />
+            <Button Content="¹⁄ᵪ" Style="{StaticResource AllButtons}" Grid.Column="0" Grid.Row="3" 
+                    Command="{Binding EnterUnaryOperatorCommand}" CommandParameter="1/x"/>
 
             <Button Content="%" Style="{StaticResource AllButtons}" Grid.Column="0" Grid.Row="2"
                 Command="{Binding EnterBinaryOperatorCommand}" CommandParameter="%"/>

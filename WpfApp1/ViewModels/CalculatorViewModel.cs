@@ -2,9 +2,7 @@
 using System.Windows.Input;
 using WpfApp1.Interfaces;
 using WpfApp1.Models;
-using WpfApp1.Services;
 using WpfApp1.Utilities;
-using WpfApp1.ViewModels;
 
 namespace WpfApp1.ViewModels
 {
@@ -15,6 +13,8 @@ namespace WpfApp1.ViewModels
         private string _firstOperand = string.Empty;
         private string _secondOperand = "0";
         private OperationModel? _currentOperation = new OperationModel();
+        private const string kDefaultOperandValue = "0";
+        private const int kMaxOperandLength = 16;
         #endregion
 
         #region Public properties
@@ -126,6 +126,21 @@ namespace WpfApp1.ViewModels
             }
         }
 
+        private ICommand _invertCommand;
+        public ICommand InvertCommand
+        {
+            get
+            {
+                if (_invertCommand == null)
+                {
+                    _invertCommand = new RelayCommand(
+                        param => InvertOperand(),
+                        param => true);
+                }
+                return _invertCommand;
+            }
+        }
+
         private ICommand _clearEntryCommand;
         public ICommand ClearEntryCommand
         {
@@ -143,11 +158,12 @@ namespace WpfApp1.ViewModels
         #endregion
 
         #region Methods
+
         public void OnNumberButtonClicked(object parameter)
         {
-            if (SecondOperand.Length < 16)
+            if (SecondOperand.Length < kMaxOperandLength)
             {
-                if (SecondOperand != "0")
+                if (SecondOperand != kDefaultOperandValue)
                     SecondOperand += parameter;
                 else
                     SecondOperand = parameter.ToString()!;
@@ -156,21 +172,25 @@ namespace WpfApp1.ViewModels
 
         public void OnBinaryOperatorButtonClicked(object parameter)
         {
-            if (SecondOperand != "0")
+            if (SecondOperand != kDefaultOperandValue)
             {
                 _currentOperation.FirstOperand = double.Parse(SecondOperand);
                 FirstOperand = SecondOperand;
                 _currentOperation.Operation = parameter.ToString();
-                SecondOperand = "0";
+                SecondOperand = kDefaultOperandValue;
             }
         }
 
         public void OnUnaryOperationButtonClicked(object parameter)
         {
+            FirstOperand = String.Empty;
             _currentOperation.FirstOperand = null;
             _currentOperation.SecondOperand = double.Parse(SecondOperand);
             _currentOperation.Operation = parameter.ToString();
-            Equals();
+            var expression = $"{_currentOperation.Operation} {_currentOperation.SecondOperand}";
+            var result = _calculator.Calculate(expression);
+            SecondOperand = result.ToString();
+            AddLogToJournal(expression, result);
         }
 
         public void Equals()
@@ -179,7 +199,9 @@ namespace WpfApp1.ViewModels
             {
                 _currentOperation.SecondOperand = double.Parse(SecondOperand);
                 _currentOperation.FirstOperand = double.Parse(FirstOperand);
+
                 var expression = $"{_currentOperation.FirstOperand} {_currentOperation.Operation} {_currentOperation.SecondOperand}";
+
                 var result = _calculator.Calculate(expression);
                 SecondOperand = result.ToString();
 
@@ -196,21 +218,33 @@ namespace WpfApp1.ViewModels
         {
             _currentOperation = new OperationModel();
             FirstOperand = string.Empty;
-            SecondOperand = "0";
+            SecondOperand = kDefaultOperandValue;
         }
 
         public void ClearEntry()
         {
-            SecondOperand = "0";
+            SecondOperand = kDefaultOperandValue;
         }
 
         public void InvertOperand()
         {
+            if (SecondOperand != kDefaultOperandValue)
+            {
+                if (double.TryParse(SecondOperand, out double operand))
+                {
+                    operand = -operand;
+                    SecondOperand = operand.ToString();
+                }
+                else
+                {
+                    SecondOperand = "Ошибка";
+                }
+            }
         }
         
         public void AddLogToJournal(string expression, double result)
         {
-            LogItems.Insert(0, expression + " = " + result.ToString()); // Добавляем в начало списка
+            LogItems.Insert(0, $"{expression} = {result}");
         }
         #endregion
 
