@@ -2,10 +2,10 @@
 
 namespace WpfApp1.Models.Operations
 {
-    public class SubtractOperation : IOperation
+    public class SubtractOperation : IBinaryOperation
     {
-        public string GetOperator() => "-"; 
-        public int GetPriority() => 1;
+        public string Operator => "-";
         public double Execute(double left, double right) => left - right;
     }
 }
+ 

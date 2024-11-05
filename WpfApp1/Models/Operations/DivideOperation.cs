@@ -2,10 +2,9 @@
 
 namespace WpfApp1.Models.Operations
 {
-    public class DivideOperation : IOperation
+    public class DivideOperation : IBinaryOperation
     {
-        public string GetOperator() => "/";
-        public int GetPriority() => 2;
+        public string Operator => "/";
         public double Execute(double left, double right)
         {
             if (right == 0)

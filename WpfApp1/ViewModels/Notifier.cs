@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace WpfApp1.MVVM
+namespace WpfApp1.ViewModels
 {
     /// <summary>
     /// Класс Notifier реализует интерфейс INotifyPropertyChanged и
@@ -98,4 +98,3 @@ namespace WpfApp1.MVVM
 
     #endregion
 }
-

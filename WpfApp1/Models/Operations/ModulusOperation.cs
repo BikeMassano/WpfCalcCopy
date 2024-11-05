@@ -2,15 +2,9 @@
 
 namespace WpfApp1.Models.Operations
 {
-    public class ModulusOperation : IOperation
+    public class ModulusOperation : IBinaryOperation
     {
-        public string GetOperator()
-        {
-            return "%";
-        }
-
-        public int GetPriority() => 2;
-
+        public string Operator => "%";
         public double Execute(double left, double right)
         {
             if (right == 0)

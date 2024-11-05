@@ -2,10 +2,9 @@
 
 namespace WpfApp1.Models.Operations
 {
-    public class PowerOperation : IOperation
+    public class PowerOperation : IUnaryOperation
     {
-        public string GetOperator() => "^";
-        public int GetPriority() => 3;
-        public double Execute(double left, double right) => Math.Pow(left, right);
+        public string Operator => "pow";
+        public double Execute(double number) => Math.Pow(number, 2);
     }
 }

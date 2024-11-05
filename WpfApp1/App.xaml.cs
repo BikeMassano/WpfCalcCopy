@@ -2,8 +2,6 @@
 using System.Windows;
 using WpfApp1.Interfaces;
 using WpfApp1.Models.Operations;
-using WpfApp1.MVVM;
-using WpfApp1.Services;
 
 namespace WpfApp1
 {

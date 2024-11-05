@@ -2,10 +2,9 @@
 
 namespace WpfApp1.Models.Operations
 {
-    public class MultiplyOperation : IOperation
+    public class MultiplyOperation : IBinaryOperation
     {
-        public string GetOperator() => "*"; 
-        public int GetPriority() => 2;
+        public string Operator => "*";
         public double Execute(double left, double right) => left * right;
     }
 }

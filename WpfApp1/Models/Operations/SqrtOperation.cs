@@ -2,10 +2,9 @@
 
 namespace WpfApp1.Models.Operations
 {
-    class SqrtOperation : IOperation
+    class SqrtOperation : IUnaryOperation
     {
-        public string GetOperator() => "√";
-        public int GetPriority() => 3;
-        public double Execute(double left, double right) => 1/right;
+        public string Operator => "sqrt";
+        public double Execute(double number) => Math.Sqrt(number);
     }
 }
