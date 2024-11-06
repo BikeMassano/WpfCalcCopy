@@ -10,6 +10,12 @@
                 <Setter Property="Background" Value="#317dbb"/>
                 <Setter Property="Foreground" Value="#9f9f9f"/>
             </Trigger>
+
+            <DataTrigger Binding="{Binding IsOperationEnabled}" Value="False">
+                <Setter Property="Background" Value="#AABEDC"/>
+                <Setter Property="Foreground" Value="#5f5f5f"/>
+                <Setter Property="IsEnabled" Value="False"/>
+            </DataTrigger>
         </Style.Triggers>
         <Setter Property="Background" Value="#0060ad"/>
         <Setter Property="Foreground" Value="#ffffff"/>
