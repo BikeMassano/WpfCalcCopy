@@ -288,6 +288,7 @@ namespace WpfApp1.ViewModels
 
                     var result = _calculator.Calculate(expression);
                     SecondOperand = result.ToString();
+                    FirstOperand = String.Empty;
 
                     AddLogToJournal(expression, result);
                 }
@@ -344,7 +345,7 @@ namespace WpfApp1.ViewModels
         
         public void AddLogToJournal(string expression, double result)
         {
-            LogItems.Insert(0, $"{expression} = {result}");
+            LogItems.Insert(0, $"{expression} =\n{result}");
         }
 
         public void ClearLogsFromJournal()

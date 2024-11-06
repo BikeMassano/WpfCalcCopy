@@ -1,5 +1,8 @@
 ﻿namespace WpfApp1.Models
 {
+    /// <summary>
+    /// Модель для хранения данных об операциях
+    /// </summary>
     class OperationModel
     {
         public double? FirstOperand { get; set; }

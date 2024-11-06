@@ -5,7 +5,7 @@
     /// </summary>
     public interface IBinaryOperation
     {
-        string Operator { get; }
+        string GetOperator();
         double Execute(double left, double right);
     }
 }

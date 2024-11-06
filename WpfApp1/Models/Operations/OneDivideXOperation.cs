@@ -5,7 +5,10 @@ namespace WpfApp1.Models.Operations
 {
     internal class OneDivideXOperation : IUnaryOperation
     {
-        public string Operator => "1/x";
+        /// <summary>
+        /// Операция деления числа 1 на число в параметре
+        /// </summary>
+        public string GetOperator() => "1/x";
         public double Execute(double number)
         {
             if (number == 0)

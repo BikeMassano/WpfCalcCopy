@@ -7,17 +7,10 @@ namespace WpfApp1.Services
     {
         private readonly Dictionary<string, IBinaryOperation> _binaryOperations = new();
         private readonly Dictionary<string, IUnaryOperation> _unaryOperations = new();
-        public Calculator()
+        public Calculator(IEnumerable<IBinaryOperation> binaryOperations, IEnumerable<IUnaryOperation> unaryOperations)
         {
-            // Добавление поддерживаемых операций
-            _binaryOperations.Add("-", new SubtractOperation());
-            _binaryOperations.Add("+", new AddOperation());
-            _binaryOperations.Add("*", new MultiplyOperation());
-            _binaryOperations.Add("/", new DivideOperation());
-            _binaryOperations.Add("%", new ModulusOperation());
-            _unaryOperations.Add("sqrt", new SqrtOperation());
-            _unaryOperations.Add("pow", new PowerOperation());
-            _unaryOperations.Add("1/x", new OneDivideXOperation());
+            _binaryOperations = binaryOperations.ToDictionary(op => op.GetOperator());
+            _unaryOperations = unaryOperations.ToDictionary(op => op.GetOperator());
         }
 
         public double Calculate(string expression)

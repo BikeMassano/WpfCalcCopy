@@ -2,7 +2,7 @@
 {
     public interface IUnaryOperation
     {
-        string Operator { get; }
+        string GetOperator();
         double Execute(double number);
     }
 }
