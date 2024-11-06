@@ -14,6 +14,7 @@
                 <ResourceDictionary Source="/Styles/NumbersTextBox.xaml"/>
                 <ResourceDictionary Source="/Styles/DropDownMenuItem.xaml"/>
                 <ResourceDictionary Source="/Styles/PopUpMenuItem.xaml"/>
+                <ResourceDictionary Source="/Styles/OperationButtons.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
