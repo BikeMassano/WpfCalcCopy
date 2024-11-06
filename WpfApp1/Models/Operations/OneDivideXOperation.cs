@@ -1,9 +1,8 @@
-﻿using System.Windows.Media.Media3D;
-using WpfApp1.Interfaces;
+﻿using WpfApp1.Interfaces;
 
 namespace WpfApp1.Models.Operations
 {
-    internal class OneDivideXOperation : IUnaryOperation
+    class OneDivideXOperation : IUnaryOperation
     {
         /// <summary>
         /// Операция деления числа 1 на число в параметре

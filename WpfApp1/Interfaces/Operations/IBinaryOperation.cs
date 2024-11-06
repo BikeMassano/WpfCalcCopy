@@ -3,9 +3,8 @@
     /// <summary>
     /// Интерфейс для операций
     /// </summary>
-    public interface IBinaryOperation
+    interface IBinaryOperation : IOperation
     {
-        string GetOperator();
         double Execute(double left, double right);
     }
 }

@@ -5,7 +5,7 @@ namespace WpfApp1.Models.Operations
     /// <summary>
     /// Операция деления двух чисел
     /// </summary>
-    public class DivideOperation : IBinaryOperation
+    class DivideOperation : IBinaryOperation
     {
         public string GetOperator() => "/";
         public double Execute(double left, double right)

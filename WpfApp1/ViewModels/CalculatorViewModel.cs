@@ -12,7 +12,7 @@ namespace WpfApp1.ViewModels
         private readonly ICalculator _calculator;
 
         private string _firstOperand = string.Empty;
-        private string _secondOperand = "0";
+        private string _secondOperand = kDefaultOperandValue;
 
         private OperationModel? _currentOperation = new OperationModel();
 
@@ -20,7 +20,7 @@ namespace WpfApp1.ViewModels
         private const int kMaxOperandLength = 16;
 
         private bool _isOperationDisabled = true;
-        #endregion
+        #endregion // Private members
 
         #region Public properties
         public ObservableCollection<string> LogItems { get; set; }
@@ -49,7 +49,7 @@ namespace WpfApp1.ViewModels
             get => _isOperationDisabled;
             set => SetProperty(ref _isOperationDisabled, value);
         }
-        #endregion
+        #endregion // Public Properties
 
         #region Constructors
         public CalculatorViewModel(ICalculator calculator)
@@ -58,7 +58,7 @@ namespace WpfApp1.ViewModels
             _currentOperation = new OperationModel();
             LogItems = new ObservableCollection<string>();
         }
-        #endregion
+        #endregion // Constructors
 
         #region Commands
 
@@ -211,7 +211,7 @@ namespace WpfApp1.ViewModels
                 return _clearLogsCommand;
             }
         }
-        #endregion
+        #endregion // Commands
 
         #region Methods
 
@@ -219,6 +219,7 @@ namespace WpfApp1.ViewModels
         {
             if (SecondOperand.Length < kMaxOperandLength)
             {
+
                 if (SecondOperand != kDefaultOperandValue)
                     SecondOperand += parameter;
                 else
@@ -229,9 +230,7 @@ namespace WpfApp1.ViewModels
         private void EnterDot(object parameter)
         {
             if (!SecondOperand.Contains(","))
-            {
                 SecondOperand += ",";
-            }
         }
 
         public void OnBinaryOperatorButtonClicked(object parameter)
@@ -240,11 +239,14 @@ namespace WpfApp1.ViewModels
             {
                 if (SecondOperand != kDefaultOperandValue)
                 {
-                    _currentOperation.FirstOperand = double.Parse(SecondOperand);
-                    FirstOperand = SecondOperand;
-                    _currentOperation.Operation = parameter.ToString();
-                    SecondOperand = kDefaultOperandValue;
-                    IsOperationEnabled = true;
+                    if (FirstOperand == String.Empty)
+                    {
+                        _currentOperation.FirstOperand = double.Parse(SecondOperand);
+                        FirstOperand = SecondOperand;
+                        _currentOperation.Operation = parameter.ToString();
+                        SecondOperand = kDefaultOperandValue;
+                        IsOperationEnabled = true;
+                    }
                 }
             }
             catch(Exception)
@@ -257,10 +259,27 @@ namespace WpfApp1.ViewModels
         {
             try
             {
-                FirstOperand = String.Empty;
-                _currentOperation.FirstOperand = null;
-                _currentOperation.SecondOperand = double.Parse(SecondOperand);
-                _currentOperation.Operation = parameter.ToString();
+                if (SecondOperand != kDefaultOperandValue && string.IsNullOrEmpty(FirstOperand))
+                {
+                    FirstOperand = String.Empty;
+                    _currentOperation.FirstOperand = null;
+                    _currentOperation.SecondOperand = double.Parse(SecondOperand);
+                    _currentOperation.Operation = parameter.ToString();
+                    ExecuteUnaryOperation();
+                }
+            }
+            catch (Exception e)
+            {
+                Clear();
+                SecondOperand = e.Message;
+                IsOperationEnabled = false;
+            }
+        }
+
+        private void ExecuteUnaryOperation()
+        {
+            try
+            {
                 var expression = $"{_currentOperation.Operation} {_currentOperation.SecondOperand}";
                 var result = _calculator.Calculate(expression);
                 SecondOperand = result.ToString();
@@ -352,7 +371,7 @@ namespace WpfApp1.ViewModels
         {
             LogItems.Clear();
         }
-        #endregion
+        #endregion // Methods
 
     }
 }

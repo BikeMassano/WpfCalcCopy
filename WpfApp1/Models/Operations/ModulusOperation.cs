@@ -5,7 +5,7 @@ namespace WpfApp1.Models.Operations
     /// <summary>
     /// Операция нахождения остатка от деления двух чисел
     /// </summary>
-    public class ModulusOperation : IBinaryOperation
+    class ModulusOperation : IBinaryOperation
     {
         public string GetOperator() => "%";
         public double Execute(double left, double right)

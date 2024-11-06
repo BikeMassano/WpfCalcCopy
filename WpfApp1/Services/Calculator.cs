@@ -1,9 +1,8 @@
 ﻿using WpfApp1.Interfaces;
-using WpfApp1.Models.Operations;
 
 namespace WpfApp1.Services
 {
-    internal class Calculator : ICalculator
+    class Calculator : ICalculator
     {
         private readonly Dictionary<string, IBinaryOperation> _binaryOperations = new();
         private readonly Dictionary<string, IUnaryOperation> _unaryOperations = new();

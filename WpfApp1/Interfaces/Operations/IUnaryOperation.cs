@@ -1,8 +1,7 @@
 ﻿namespace WpfApp1.Interfaces
 {
-    public interface IUnaryOperation
+    interface IUnaryOperation : IOperation
     {
-        string GetOperator();
         double Execute(double number);
     }
 }
