@@ -18,6 +18,8 @@ namespace WpfApp1.ViewModels
 
         private const string kDefaultOperandValue = "0";
         private const int kMaxOperandLength = 16;
+
+        private bool _isOperationDisabled = true;
         #endregion
 
         #region Public properties
@@ -40,6 +42,12 @@ namespace WpfApp1.ViewModels
                 _secondOperand = value;
                 OnPropertyChanged();
             }
+        }
+
+        public bool IsOperationEnabled
+        {
+            get => _isOperationDisabled;
+            set => SetProperty(ref _isOperationDisabled, value);
         }
         #endregion
 
@@ -69,6 +77,21 @@ namespace WpfApp1.ViewModels
             }
         }
 
+        private ICommand _enterDotCommand;
+        public ICommand EnterDotCommand
+        {
+            get
+            {
+                if (_enterDotCommand == null)
+                {
+                    _enterDotCommand = new RelayCommand(
+                        param => EnterDot(param),
+                        param => IsOperationEnabled);
+                }
+                return _enterDotCommand;
+            }
+        }
+
         private ICommand _enterBinaryOperatorCommand;
         public ICommand EnterBinaryOperatorCommand
         {
@@ -78,7 +101,7 @@ namespace WpfApp1.ViewModels
                 {
                     _enterBinaryOperatorCommand = new RelayCommand(
                         param => OnBinaryOperatorButtonClicked(param),
-                        param => true);
+                        param => IsOperationEnabled);
                 }
                 return _enterBinaryOperatorCommand;
             }
@@ -93,7 +116,7 @@ namespace WpfApp1.ViewModels
                 {
                     _enterUnaryOperatorCommand = new RelayCommand(
                         param => OnUnaryOperationButtonClicked(param),
-                        param => true);
+                        param => IsOperationEnabled);
                 }
                 return _enterUnaryOperatorCommand;
             }
@@ -108,7 +131,7 @@ namespace WpfApp1.ViewModels
                 {
                     _equalCommand = new RelayCommand(
                         param => Equals(),
-                        param => true);
+                        param => IsOperationEnabled);
                 }
                 return _equalCommand;
             }
@@ -138,7 +161,7 @@ namespace WpfApp1.ViewModels
                 {
                     _invertCommand = new RelayCommand(
                         param => InvertOperand(),
-                        param => true);
+                        param => IsOperationEnabled);
                 }
                 return _invertCommand;
             }
@@ -158,6 +181,36 @@ namespace WpfApp1.ViewModels
                 return _clearEntryCommand;
             }
         }
+
+        private ICommand _deleteSymbolCommand;
+        public ICommand DeleteSymbolCommand
+        {
+            get
+            {
+                if (_deleteSymbolCommand == null)
+                {
+                    _deleteSymbolCommand = new RelayCommand(
+                        param => DeleteSymbol(param),
+                        param => IsOperationEnabled);
+                }
+                return _deleteSymbolCommand;
+            }
+        }
+
+        private ICommand _clearLogsCommand;
+        public ICommand ClearLogsCommand
+        {
+            get
+            {
+                if (_clearLogsCommand == null)
+                {
+                    _clearLogsCommand = new RelayCommand(
+                        param => ClearLogsFromJournal(),
+                        param => IsOperationEnabled);
+                }
+                return _clearLogsCommand;
+            }
+        }
         #endregion
 
         #region Methods
@@ -173,14 +226,30 @@ namespace WpfApp1.ViewModels
             }
         }
 
+        private void EnterDot(object parameter)
+        {
+            if (!SecondOperand.Contains(","))
+            {
+                SecondOperand += ",";
+            }
+        }
+
         public void OnBinaryOperatorButtonClicked(object parameter)
         {
-            if (SecondOperand != kDefaultOperandValue)
+            try
             {
-                _currentOperation.FirstOperand = double.Parse(SecondOperand);
-                FirstOperand = SecondOperand;
-                _currentOperation.Operation = parameter.ToString();
-                SecondOperand = kDefaultOperandValue;
+                if (SecondOperand != kDefaultOperandValue)
+                {
+                    _currentOperation.FirstOperand = double.Parse(SecondOperand);
+                    FirstOperand = SecondOperand;
+                    _currentOperation.Operation = parameter.ToString();
+                    SecondOperand = kDefaultOperandValue;
+                    IsOperationEnabled = true;
+                }
+            }
+            catch(Exception)
+            {
+                IsOperationEnabled = false;
             }
         }
 
@@ -196,11 +265,13 @@ namespace WpfApp1.ViewModels
                 var result = _calculator.Calculate(expression);
                 SecondOperand = result.ToString();
                 AddLogToJournal(expression, result);
+                IsOperationEnabled = true;
             }
             catch (Exception e)
             {
                 Clear();
                 SecondOperand = e.Message;
+                IsOperationEnabled = false;
             }
         }
 
@@ -208,20 +279,24 @@ namespace WpfApp1.ViewModels
         {
             try
             {
-                _currentOperation.SecondOperand = double.Parse(SecondOperand);
-                _currentOperation.FirstOperand = double.Parse(FirstOperand);
+                if (FirstOperand != String.Empty)
+                {
+                    _currentOperation.SecondOperand = double.Parse(SecondOperand);
+                    _currentOperation.FirstOperand = double.Parse(FirstOperand);
 
-                var expression = $"{_currentOperation.FirstOperand} {_currentOperation.Operation} {_currentOperation.SecondOperand}";
+                    var expression = $"{_currentOperation.FirstOperand} {_currentOperation.Operation} {_currentOperation.SecondOperand}";
 
-                var result = _calculator.Calculate(expression);
-                SecondOperand = result.ToString();
+                    var result = _calculator.Calculate(expression);
+                    SecondOperand = result.ToString();
 
-                AddLogToJournal(expression, result);
+                    AddLogToJournal(expression, result);
+                }
             }
             catch (Exception e)
             {
                 Clear();
                 SecondOperand= e.Message;
+                IsOperationEnabled = false;
             }
         }
 
@@ -230,11 +305,25 @@ namespace WpfApp1.ViewModels
             _currentOperation = new OperationModel();
             FirstOperand = string.Empty;
             SecondOperand = kDefaultOperandValue;
+            IsOperationEnabled = true;
         }
 
         public void ClearEntry()
         {
             SecondOperand = kDefaultOperandValue;
+            IsOperationEnabled = true;
+        }
+
+        private void DeleteSymbol(object parameter)
+        {
+            if (SecondOperand.Length > 1 && SecondOperand != kDefaultOperandValue)
+            {
+                SecondOperand = SecondOperand.Substring(0, SecondOperand.Length - 1);
+            }
+            else
+            {
+                SecondOperand = kDefaultOperandValue;
+            }
         }
 
         public void InvertOperand()
@@ -256,6 +345,11 @@ namespace WpfApp1.ViewModels
         public void AddLogToJournal(string expression, double result)
         {
             LogItems.Insert(0, $"{expression} = {result}");
+        }
+
+        public void ClearLogsFromJournal()
+        {
+            LogItems.Clear();
         }
         #endregion
 

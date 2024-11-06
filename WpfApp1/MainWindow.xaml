@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WpfApp1"
         
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="450" MinHeight="505" MinWidth="335" WindowStartupLocation="CenterScreen">
+        Title="MainWindow" Height="800" Width="450" MinHeight="505" MinWidth="335" WindowStartupLocation="CenterScreen" KeyDown="Window_KeyDown">
     
     <Grid Name="MyGrid" Background="#f3f3f3">
         <Grid.ColumnDefinitions>
@@ -88,7 +88,7 @@
                 Command="{Binding ClearEntryCommand}"/>
 
             <Button Content="," Style="{StaticResource AllButtons}" Grid.Column="2" Grid.Row="7" 
-                Command="{Binding EnterNumberCommand}" CommandParameter="."/>
+                Command="{Binding EnterDotCommand}"/>
 
             <Button Content="3" Style="{StaticResource AllButtons}" Grid.Column="2" Grid.Row="6"
                 Command="{Binding EnterNumberCommand}" CommandParameter="3"/>
@@ -120,7 +120,8 @@
             <Button Content="÷" Style="{StaticResource AllButtons}" Grid.Column="3" Grid.Row="3"
                 Command="{Binding EnterBinaryOperatorCommand}" CommandParameter="/"/>
 
-            <Button Content="⌫" Style="{StaticResource AllButtons}" FontSize="18" Grid.Column="3" Grid.Row="2" />
+            <Button Content="⌫" Style="{StaticResource AllButtons}" FontSize="18" Grid.Column="3" Grid.Row="2" 
+                    Command="{Binding DeleteSymbolCommand}"/>
 
             <Menu HorizontalAlignment="Left" VerticalAlignment="Top">
                 <MenuItem Style="{StaticResource DropDownMenuItem}" Height="30" Width="30">
@@ -171,27 +172,41 @@
                 </MenuItem>
             </Menu>
         </Grid>
-        
-        <StackPanel Grid.Column="1">
-            <TextBlock Text="Журнал" 
-                       Grid.Column="1"
-                       FontSize="20"
-                       Margin="5 0 0 0"/>
 
-            <ListBox Grid.Column="1" 
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Для кнопки и текста -->
+                <RowDefinition Height="*"/>
+                <!-- Для списка (записей) -->
+            </Grid.RowDefinitions>
+
+            <!-- Кнопка корзины и текст "Журнал" в первой строке -->
+            <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center">
+                <Button Content="🗑" Style="{StaticResource AllButtons}" FontSize="18"
+                        VerticalAlignment="Center"
+                        Width="30"
+                        Height="30"
+                        Command="{Binding ClearLogsCommand}"/>
+                <TextBlock Text="Журнал" 
+            FontSize="20"
+            Margin="5 0 0 0"
+            VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <!-- Список записей в второй строке -->
+            <ListBox Grid.Row="1" 
                      Background="Transparent" 
                      BorderThickness="0"
                      ItemsSource="{Binding LogItems}">
-
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding}" 
                                    FontSize="20" 
-                                   Margin="3 5 0 0"
-                                   />
+                                   Margin="3 5 0 0"/>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-        </StackPanel>
+        </Grid>
     </Grid>
 </Window>
