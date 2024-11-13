@@ -387,6 +387,7 @@ namespace WpfApp1.ViewModels
         {
             SecondOperand = DEFAULT_OPERAND_VALUE;
             IsOperationEnabled = true;
+            _canRepeatOperation = false;
         }
 
         public void DeleteSymbol()

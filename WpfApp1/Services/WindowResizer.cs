@@ -20,7 +20,7 @@ namespace WpfApp1.Services
 
                 if (e.NewSize.Width >= thresholdWidth)
                 {
-                    secondColumn.Width = new GridLength(0.75, GridUnitType.Star);
+                    secondColumn.Width = new GridLength(270);
                 }
                 else
                 {
