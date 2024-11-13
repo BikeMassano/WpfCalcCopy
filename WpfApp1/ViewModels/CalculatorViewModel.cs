@@ -12,14 +12,16 @@ namespace WpfApp1.ViewModels
         private readonly ICalculator _calculator = null!;
 
         private string _firstOperand = string.Empty;
-        private string _secondOperand = kDefaultOperandValue;
+        private string _secondOperand = DEFAULT_OPERAND_VALUE;
 
         private OperationModel? _currentOperation = new OperationModel();
 
-        private const string kDefaultOperandValue = "0";
-        private const int kMaxOperandLength = 16;
+        private const string DEFAULT_OPERAND_VALUE = "0";
+        private const int MAX_OPERAND_LENGTH = 16;
 
         private bool _isOperationDisabled = true;
+        private bool _canRepeatOperation = false;
+
         #endregion // Private members
 
         #region Public properties
@@ -224,10 +226,10 @@ namespace WpfApp1.ViewModels
                 return;
             }
 
-            if (SecondOperand.Length < kMaxOperandLength)
+            if (SecondOperand.Length < MAX_OPERAND_LENGTH)
             {
 
-                if (SecondOperand != kDefaultOperandValue)
+                if (SecondOperand != DEFAULT_OPERAND_VALUE)
                     SecondOperand += parameter;
                 else
                     SecondOperand = parameter.ToString()!;
@@ -244,16 +246,33 @@ namespace WpfApp1.ViewModels
         {
             try
             {
-                if (SecondOperand != kDefaultOperandValue)
+                if (_canRepeatOperation)
                 {
-                    if (FirstOperand == String.Empty)
+                    _canRepeatOperation = false;
+                    FirstOperand = String.Empty;
+                }
+                // Если второй операнд не равен значению по умолчанию
+                if (SecondOperand != DEFAULT_OPERAND_VALUE)
+                {
+                    // Если первый операнд еще не установлен
+                    if (string.IsNullOrWhiteSpace(FirstOperand))
                     {
-                        _currentOperation.FirstOperand = double.Parse(SecondOperand);
-                        FirstOperand = SecondOperand;
-                        _currentOperation.Operation = parameter.ToString();
-                        SecondOperand = kDefaultOperandValue;
-                        IsOperationEnabled = true;
+                        SetBinaryOperationState(SecondOperand, parameter.ToString());
+                        return;
                     }
+
+                    // Если первый операнд уже установлен, выполняем операцию Equals
+                    _currentOperation.SecondOperand = double.Parse(SecondOperand);
+                    _currentOperation.FirstOperand = double.Parse(FirstOperand);
+
+                    var expression = $"{_currentOperation.FirstOperand} {_currentOperation.Operation} {_currentOperation.SecondOperand}";
+
+                    var result = _calculator.Calculate(expression);
+                    SecondOperand = result.ToString();
+
+                    AddLogToJournal(expression, result);
+                    SetBinaryOperationState(SecondOperand, parameter.ToString());
+                    return;
                 }
             }
             catch(Exception)
@@ -262,11 +281,21 @@ namespace WpfApp1.ViewModels
             }
         }
 
+        private void SetBinaryOperationState(string secondOperand, string operation)
+        {
+            _currentOperation.FirstOperand = double.Parse(secondOperand);
+            FirstOperand = secondOperand;
+            _currentOperation.Operation = operation;
+            SecondOperand = DEFAULT_OPERAND_VALUE;
+            IsOperationEnabled = true;
+        }
+
         public void OnUnaryOperationButtonClicked(object parameter)
         {
             try
             {
-                if (SecondOperand != kDefaultOperandValue && string.IsNullOrEmpty(FirstOperand))
+                _canRepeatOperation = false;
+                if (SecondOperand != DEFAULT_OPERAND_VALUE && string.IsNullOrWhiteSpace(FirstOperand))
                 {
                     FirstOperand = String.Empty;
                     _currentOperation.FirstOperand = null;
@@ -305,18 +334,36 @@ namespace WpfApp1.ViewModels
         {
             try
             {
-                if (FirstOperand != String.Empty)
+                if (!string.IsNullOrEmpty(FirstOperand))
                 {
-                    _currentOperation.SecondOperand = double.Parse(SecondOperand);
-                    _currentOperation.FirstOperand = double.Parse(FirstOperand);
+                    if(!_canRepeatOperation)
+                    {
+                        _currentOperation.SecondOperand = double.Parse(SecondOperand);
+                        _currentOperation.FirstOperand = double.Parse(FirstOperand);
 
-                    var expression = $"{_currentOperation.FirstOperand} {_currentOperation.Operation} {_currentOperation.SecondOperand}";
+                        var expression = $"{_currentOperation.FirstOperand} {_currentOperation.Operation} {_currentOperation.SecondOperand}";
 
-                    var result = _calculator.Calculate(expression);
-                    SecondOperand = result.ToString();
-                    FirstOperand = String.Empty;
+                        var result = _calculator.Calculate(expression);
+                        SecondOperand = result.ToString();
 
-                    AddLogToJournal(expression, result);
+                        AddLogToJournal(expression, result);
+                        _canRepeatOperation = true;
+                        return;
+                    }
+
+                    if (_canRepeatOperation)
+                    {
+                        _currentOperation.FirstOperand = double.Parse(SecondOperand);
+                        FirstOperand = SecondOperand;
+
+                        var expression = $"{_currentOperation.FirstOperand} {_currentOperation.Operation} {_currentOperation.SecondOperand}";
+
+                        var result = _calculator.Calculate(expression);
+                        SecondOperand = result.ToString();
+
+                        AddLogToJournal(expression, result);
+                        return;
+                    }
                 }
             }
             catch (Exception e)
@@ -331,13 +378,14 @@ namespace WpfApp1.ViewModels
         {
             _currentOperation = new OperationModel();
             FirstOperand = string.Empty;
-            SecondOperand = kDefaultOperandValue;
+            SecondOperand = DEFAULT_OPERAND_VALUE;
             IsOperationEnabled = true;
+            _canRepeatOperation = false;
         }
 
         public void ClearEntry()
         {
-            SecondOperand = kDefaultOperandValue;
+            SecondOperand = DEFAULT_OPERAND_VALUE;
             IsOperationEnabled = true;
         }
 
@@ -350,19 +398,19 @@ namespace WpfApp1.ViewModels
                 return;
             }
 
-            if (SecondOperand.Length > 1 && SecondOperand != kDefaultOperandValue)
+            if (SecondOperand.Length > 1 && SecondOperand != DEFAULT_OPERAND_VALUE)
             {
                 SecondOperand = SecondOperand.Substring(0, SecondOperand.Length - 1);
             }
             else
             {
-                SecondOperand = kDefaultOperandValue;
+                SecondOperand = DEFAULT_OPERAND_VALUE;
             }
         }
 
         public void InvertOperand()
         {
-            if (SecondOperand != kDefaultOperandValue)
+            if (SecondOperand != DEFAULT_OPERAND_VALUE)
             {
                 if (double.TryParse(SecondOperand, out double operand))
                 {
