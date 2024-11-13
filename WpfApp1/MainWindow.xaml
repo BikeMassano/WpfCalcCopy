@@ -120,7 +120,7 @@
             <Button Content="÷" Style="{StaticResource OperationButtons}" Grid.Column="3" Grid.Row="3"
                 Command="{Binding EnterBinaryOperatorCommand}" CommandParameter="/"/>
 
-            <Button Content="⌫" Style="{StaticResource OperationButtons}" FontSize="18" Grid.Column="3" Grid.Row="2" 
+            <Button Content="⌫" Style="{StaticResource AllButtons}" FontSize="18" Grid.Column="3" Grid.Row="2" 
                     Command="{Binding DeleteSymbolCommand}"/>
 
             <Menu HorizontalAlignment="Left" VerticalAlignment="Top">

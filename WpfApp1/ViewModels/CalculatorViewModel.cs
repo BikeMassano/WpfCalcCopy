@@ -85,7 +85,7 @@ namespace WpfApp1.ViewModels
                 if (_enterDotCommand == null)
                 {
                     _enterDotCommand = new RelayCommand(
-                        param => EnterDot(param),
+                        param => EnterDot(),
                         param => IsOperationEnabled);
                 }
                 return _enterDotCommand;
@@ -190,8 +190,8 @@ namespace WpfApp1.ViewModels
                 if (_deleteSymbolCommand == null)
                 {
                     _deleteSymbolCommand = new RelayCommand(
-                        param => DeleteSymbol(param),
-                        param => IsOperationEnabled);
+                        param => DeleteSymbol(),
+                        param => true);
                 }
                 return _deleteSymbolCommand;
             }
@@ -217,6 +217,13 @@ namespace WpfApp1.ViewModels
 
         public void OnNumberButtonClicked(object parameter)
         {
+            if (IsOperationEnabled == false)
+            {
+                SecondOperand = parameter.ToString()!;
+                IsOperationEnabled = true;
+                return;
+            }
+
             if (SecondOperand.Length < kMaxOperandLength)
             {
 
@@ -227,7 +234,7 @@ namespace WpfApp1.ViewModels
             }
         }
 
-        private void EnterDot(object parameter)
+        public void EnterDot()
         {
             if (!SecondOperand.Contains(","))
                 SecondOperand += ",";
@@ -276,7 +283,7 @@ namespace WpfApp1.ViewModels
             }
         }
 
-        private void ExecuteUnaryOperation()
+        public void ExecuteUnaryOperation()
         {
             try
             {
@@ -334,8 +341,15 @@ namespace WpfApp1.ViewModels
             IsOperationEnabled = true;
         }
 
-        private void DeleteSymbol(object parameter)
+        public void DeleteSymbol()
         {
+            if (IsOperationEnabled == false)
+            {
+                Clear();
+                IsOperationEnabled = true;
+                return;
+            }
+
             if (SecondOperand.Length > 1 && SecondOperand != kDefaultOperandValue)
             {
                 SecondOperand = SecondOperand.Substring(0, SecondOperand.Length - 1);

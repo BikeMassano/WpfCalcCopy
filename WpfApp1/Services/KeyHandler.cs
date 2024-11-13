@@ -44,11 +44,11 @@ namespace WpfApp1
                     _viewModel.EnterNumberCommand.Execute(e.Key.ToString().Substring(6));
                     break;
 
-                case Key.Add:
+                case Key.OemPlus:
                     _viewModel.EnterBinaryOperatorCommand.Execute("+");
                     break;
 
-                case Key.Subtract:
+                case Key.OemMinus:
                     _viewModel.EnterBinaryOperatorCommand.Execute("-");
                     break;
 
@@ -80,12 +80,8 @@ namespace WpfApp1
                     _viewModel.ClearEntryCommand.Execute(null);
                     break;
 
-                case Key.Decimal:
+                case Key.OemComma:
                     _viewModel.EnterDotCommand.Execute(null);
-                    break;
-
-                case Key.OemMinus:
-                    _viewModel.InvertCommand.Execute(null);
                     break;
             }
         }
