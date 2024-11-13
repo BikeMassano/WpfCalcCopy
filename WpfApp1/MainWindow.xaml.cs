@@ -18,10 +18,7 @@ namespace WpfApp1
         private readonly IKeyHandler _keyHandler;
         public MainWindow()
         {
-            var serviceProvider = ServiceConfigurator.ConfigureServices();
-            var calculator = serviceProvider.GetService<ICalculator>();
-
-            DataContext = new CalculatorViewModel(calculator);
+            InitializeComponent();
 
             _windowResizer = new WindowResizer(600);
             _keyHandler = new KeyHandler((CalculatorViewModel)DataContext);

@@ -9,7 +9,7 @@ namespace WpfApp1.ViewModels
     class CalculatorViewModel : Notifier
     {
         #region Private members
-        private readonly ICalculator _calculator;
+        private readonly ICalculator _calculator = null!;
 
         private string _firstOperand = string.Empty;
         private string _secondOperand = kDefaultOperandValue;
@@ -62,7 +62,7 @@ namespace WpfApp1.ViewModels
 
         #region Commands
 
-        private ICommand _enterNumberCommand;
+        private ICommand _enterNumberCommand = null!;
         public ICommand EnterNumberCommand
         {
             get
@@ -77,7 +77,7 @@ namespace WpfApp1.ViewModels
             }
         }
 
-        private ICommand _enterDotCommand;
+        private ICommand _enterDotCommand = null!;
         public ICommand EnterDotCommand
         {
             get
@@ -92,7 +92,7 @@ namespace WpfApp1.ViewModels
             }
         }
 
-        private ICommand _enterBinaryOperatorCommand;
+        private ICommand _enterBinaryOperatorCommand = null!;
         public ICommand EnterBinaryOperatorCommand
         {
             get
@@ -107,7 +107,7 @@ namespace WpfApp1.ViewModels
             }
         }
 
-        private ICommand _enterUnaryOperatorCommand;
+        private ICommand _enterUnaryOperatorCommand = null!;
         public ICommand EnterUnaryOperatorCommand
         {
             get
@@ -122,7 +122,7 @@ namespace WpfApp1.ViewModels
             }
         }
 
-        private ICommand _equalCommand;
+        private ICommand _equalCommand = null!;
         public ICommand EqualsCommand
         {
             get
@@ -137,7 +137,7 @@ namespace WpfApp1.ViewModels
             }
         }
 
-        private ICommand _clearCommand;
+        private ICommand _clearCommand = null!;
         public ICommand ClearCommand
         {
             get
@@ -152,7 +152,7 @@ namespace WpfApp1.ViewModels
             }
         }
 
-        private ICommand _invertCommand;
+        private ICommand _invertCommand = null!;
         public ICommand InvertCommand
         {
             get
@@ -167,7 +167,7 @@ namespace WpfApp1.ViewModels
             }
         }
 
-        private ICommand _clearEntryCommand;
+        private ICommand _clearEntryCommand = null!;
         public ICommand ClearEntryCommand
         {
             get
@@ -182,7 +182,7 @@ namespace WpfApp1.ViewModels
             }
         }
 
-        private ICommand _deleteSymbolCommand;
+        private ICommand _deleteSymbolCommand = null!;
         public ICommand DeleteSymbolCommand
         {
             get
@@ -197,7 +197,7 @@ namespace WpfApp1.ViewModels
             }
         }
 
-        private ICommand _clearLogsCommand;
+        private ICommand _clearLogsCommand = null!;
         public ICommand ClearLogsCommand
         {
             get
@@ -236,7 +236,7 @@ namespace WpfApp1.ViewModels
 
         public void EnterDot()
         {
-            if (!SecondOperand.Contains(","))
+            if (!SecondOperand.Contains(','))
                 SecondOperand += ",";
         }
 
