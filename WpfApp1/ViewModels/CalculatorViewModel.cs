@@ -19,7 +19,7 @@ namespace WpfApp1.ViewModels
         private const string DEFAULT_OPERAND_VALUE = "0";
         private const int MAX_OPERAND_LENGTH = 16;
 
-        private bool _isOperationDisabled = true;
+        private bool _isOperationEnabled = true;
         private bool _canRepeatOperation = false;
 
         #endregion // Private members
@@ -48,8 +48,8 @@ namespace WpfApp1.ViewModels
 
         public bool IsOperationEnabled
         {
-            get => _isOperationDisabled;
-            set => SetProperty(ref _isOperationDisabled, value);
+            get => _isOperationEnabled;
+            set => SetProperty(ref _isOperationEnabled, value);
         }
         #endregion // Public Properties
 
@@ -219,9 +219,10 @@ namespace WpfApp1.ViewModels
 
         public void OnNumberButtonClicked(object parameter)
         {
-            if (IsOperationEnabled == false)
+            if (IsOperationEnabled == false || _canRepeatOperation)
             {
                 SecondOperand = parameter.ToString()!;
+                _canRepeatOperation = false;
                 IsOperationEnabled = true;
                 return;
             }
@@ -261,7 +262,6 @@ namespace WpfApp1.ViewModels
                         return;
                     }
 
-                    // Если первый операнд уже установлен, выполняем операцию Equals
                     _currentOperation.SecondOperand = double.Parse(SecondOperand);
                     _currentOperation.FirstOperand = double.Parse(FirstOperand);
 
@@ -294,10 +294,10 @@ namespace WpfApp1.ViewModels
         {
             try
             {
+                FirstOperand = String.Empty;
                 _canRepeatOperation = false;
-                if (SecondOperand != DEFAULT_OPERAND_VALUE && string.IsNullOrWhiteSpace(FirstOperand))
+                if (SecondOperand != DEFAULT_OPERAND_VALUE)
                 {
-                    FirstOperand = String.Empty;
                     _currentOperation.FirstOperand = null;
                     _currentOperation.SecondOperand = double.Parse(SecondOperand);
                     _currentOperation.Operation = parameter.ToString();
