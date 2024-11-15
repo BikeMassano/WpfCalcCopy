@@ -15,16 +15,26 @@ namespace WpfApp1
     public partial class MainWindow : Window
     {
         private readonly WindowResizer _windowResizer;
-        private readonly IKeyHandler _keyHandler;
+        private IKeyHandler _keyHandler;
         public MainWindow()
         {
             InitializeComponent();
 
             _windowResizer = new WindowResizer(600);
-            _keyHandler = new KeyHandler((CalculatorViewModel)DataContext);
+
+            // Подписка на событие DataContextChanged
+            this.DataContextChanged += MainWindow_DataContextChanged;
 
             // Подписка на событие изменения размеров окна
             this.SizeChanged += Window_SizeChanged;
+        }
+
+        private void MainWindow_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue is CalculatorViewModel viewModel)
+            {
+                _keyHandler = new KeyHandler(viewModel);
+            }
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
